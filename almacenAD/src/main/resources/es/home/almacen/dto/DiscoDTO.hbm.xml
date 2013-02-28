@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 11-mar-2011 12:24:35 by Hibernate Tools 3.3.0.GA -->
+<hibernate-mapping>
+    <class name="es.home.almacen.dto.DiscoDTO" table="disco" catalog="almacen">
+        <id name="iddisco" type="java.lang.Integer">
+            <column name="IDDISCO" />
+            <generator class="increment" />
+        </id>
+        <many-to-one name="grupo" class="es.home.almacen.dto.GrupoDTO" fetch="select">
+            <column name="IDGRUPO" not-null="true" />
+        </many-to-one>
+        <property name="nombre" type="string">
+            <column name="NOMBRE" length="45" not-null="true" />
+        </property>
+        <property name="productor" type="string">
+            <column name="PRODUCTOR" length="45" />
+        </property>
+        <property name="sello" type="string">
+            <column name="SELLO" length="45" />
+        </property>
+        <property name="anyo" type="java.lang.Integer">
+            <column name="ANYO" />
+        </property>
+        <set name="cancions" table="cancion" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="IDDISCO" not-null="true" />
+            </key>
+            <one-to-many class="es.home.almacen.dto.CancionDTO" />
+        </set>
+        <set name="participantes" table="participante" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="IDDISCO" not-null="true" />
+            </key>
+            <one-to-many class="es.home.almacen.dto.ParticipanteDTO" />
+        </set>
+    </class>
+</hibernate-mapping>

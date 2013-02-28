@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 11-mar-2011 12:24:35 by Hibernate Tools 3.3.0.GA -->
+<hibernate-mapping>
+    <class name="es.home.almacen.dto.ComponenteDTO" table="componente" catalog="almacen">
+        <id name="idcomponente" type="java.lang.Integer">
+            <column name="IDCOMPONENTE" />
+            <generator class="increment" />
+        </id>
+        <property name="nombre" type="string">
+            <column name="NOMBRE" length="45" not-null="true" />
+        </property>
+        <set name="participantes" table="participante" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="IDCOMPONENTE" not-null="true" />
+            </key>
+            <one-to-many class="es.home.almacen.dto.ParticipanteDTO" />
+        </set>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 11-mar-2011 12:24:35 by Hibernate Tools 3.3.0.GA -->
+<hibernate-mapping>
+    <class name="es.home.almacen.dto.ParticipanteDTO" table="participante" catalog="almacen">
+        <id name="idplay" type="java.lang.Integer">
+            <column name="IDPLAY" />
+            <generator class="increment" />
+        </id>
+        <many-to-one name="componente" class="es.home.almacen.dto.ComponenteDTO" fetch="select">
+            <column name="IDCOMPONENTE" not-null="true" />
+        </many-to-one>
+        <many-to-one name="disco" class="es.home.almacen.dto.DiscoDTO" fetch="select">
+            <column name="IDDISCO" not-null="true" />
+        </many-to-one>
+        <property name="instrumento" type="string">
+            <column name="INSTRUMENTO" length="400" />
+        </property>
+    </class>
+</hibernate-mapping>

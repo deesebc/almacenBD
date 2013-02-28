@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!-- Generated 11-mar-2011 12:24:35 by Hibernate Tools 3.3.0.GA -->
+<hibernate-mapping>
+    <class name="es.home.almacen.dto.LibroDTO" table="libro" catalog="almacen">
+        <id name="idlibro" type="int">
+            <column name="idlibro" />
+            <generator class="increment" />
+        </id>
+        <property name="nombre" type="string">
+            <column name="nombre" length="45" not-null="true" />
+        </property>
+        <property name="nombreOriginal" type="string">
+            <column name="`nombre original`" length="45" />
+        </property>
+        <property name="autor" type="string">
+            <column name="autor" length="45" not-null="true" />
+        </property>
+        <property name="ilustracion" type="string">
+            <column name="ilustracion" length="45" />
+        </property>
+        <property name="disenyo" type="string">
+            <column name="disenyo" length="45" />
+        </property>
+        <property name="traduccion" type="string">
+            <column name="traduccion" length="45" />
+        </property>
+        <property name="editorial" type="string">
+            <column name="editorial" length="45" />
+        </property>
+        <property name="edicion" type="string">
+            <column name="edicion" length="45" />
+        </property>
+        <property name="paginas" type="java.lang.Integer">
+            <column name="paginas" />
+        </property>
+        <property name="argumento" type="string">
+            <column name="argumento" length="400" />
+        </property>
+        <property name="saga" type="string">
+            <column name="saga" length="45" />
+        </property>
+    </class>
+</hibernate-mapping>

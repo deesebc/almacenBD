@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN 2.0//EN" "http://www.springframework.org/dtd/spring-beans-2.0.dtd">
+
+<beans>
+	<bean id="dataSourceMysql"
+		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="com.mysql.jdbc.Driver" />
+		<property name="url" value="jdbc:mysql://localhost:3306/almacen" />
+		<property name="username" value="root" />
+		<property name="password" value="root" />
+	</bean>
+
+	<!-- Definir la factoria de sesion de Hibernate A traves de un bean de IoC -->
+	<bean id="sessionFactoryMysql"
+		class="org.springframework.orm.hibernate3.LocalSessionFactoryBean">
+		<property name="dataSource" ref="dataSourceMysql" />
+		<property name="mappingResources">
+			<list>
+				<value>es/home/almacen/dto/LibroDTO.hbm.xml</value>
+				<value>es/home/almacen/dto/CancionDTO.hbm.xml</value>
+				<value>es/home/almacen/dto/DiscoDTO.hbm.xml</value>
+				<value>es/home/almacen/dto/ParticipanteDTO.hbm.xml</value>
+				<value>es/home/almacen/dto/GrupoDTO.hbm.xml</value>
+				<value>es/home/almacen/dto/ComponenteDTO.hbm.xml</value>
+			</list>
+		</property>
+		<property name="hibernateProperties">
+			<props>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.c3p0.minPoolSize">5</prop>
+				<prop key="hibernate.c3p0.maxPoolSize">20</prop>
+				<prop key="hibernate.c3p0.timeout">600</prop>
+				<prop key="hibernate.c3p0.max_statement">50</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="libroDAOImpl" class="es.home.almacen.dao.impl.LibroDAOImpl">
+		<property name="sessionFactory" ref="sessionFactoryMysql" />
+	</bean>
+	<bean id="cancionDAOImpl" class="es.home.almacen.dao.impl.CancionDAOImpl">
+		<property name="sessionFactory" ref="sessionFactoryMysql" />
+	</bean>
+
+	<bean id="grupoDAOImpl" class="es.home.almacen.dao.impl.GrupoDAOImpl">
+		<property name="sessionFactory" ref="sessionFactoryMysql" />
+	</bean>
+
+	<bean id="participanteDAOImpl" class="es.home.almacen.dao.impl.ParticipanteDAOImpl">
+		<property name="sessionFactory" ref="sessionFactoryMysql" />
+	</bean>
+
+	<bean id="componenteDAOImpl" class="es.home.almacen.dao.impl.ComponenteDAOImpl">
+		<property name="sessionFactory" ref="sessionFactoryMysql" />
+	</bean>
+
+	<bean id="discoDAOImpl" class="es.home.almacen.dao.impl.DiscoDAOImpl">
+		<property name="sessionFactory" ref="sessionFactoryMysql" />
+	</bean>
+
+	<!-- definimos los DAO con transacction manager programatico <bean id="libroDAOImpl" 
+		class="es.home.almacen.dao.impl.LibroDAOImpl"> <property name="sessionFactory" 
+		ref="sessionFactoryMysql" /> <property name="transactionManager" ref="txManagerDAO" 
+		/> </bean> -->
+
+	<bean id="txManagerDAO"
+		class="org.springframework.orm.hibernate3.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactoryMysql" />
+	</bean>
+	<!-- Definimos los DAO con transacction manager declarativo -->
+	<bean id="libroDaoTxDeclarativoImpl"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager" ref="txManagerDAO" />
+		<property name="target" ref="libroDAOImpl" />
+		<property name="transactionAttributes">
+			<props>
+				<prop key="get*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="load*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="add*">PROPAGATION_MANDATORY</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="cancionDaoTxDeclarativoImpl"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager" ref="txManagerDAO" />
+		<property name="target" ref="cancionDAOImpl" />
+		<property name="transactionAttributes">
+			<props>
+				<prop key="get*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="load*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="add*">PROPAGATION_MANDATORY</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="discoDaoTxDeclarativoImpl"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager" ref="txManagerDAO" />
+		<property name="target" ref="discoDAOImpl" />
+		<property name="transactionAttributes">
+			<props>
+				<prop key="get*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="load*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="add*">PROPAGATION_MANDATORY</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="grupoDaoTxDeclarativoImpl"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager" ref="txManagerDAO" />
+		<property name="target" ref="grupoDAOImpl" />
+		<property name="transactionAttributes">
+			<props>
+				<prop key="get*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="load*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="add*">PROPAGATION_MANDATORY</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="componenteDaoTxDeclarativoImpl"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager" ref="txManagerDAO" />
+		<property name="target" ref="componenteDAOImpl" />
+		<property name="transactionAttributes">
+			<props>
+				<prop key="get*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="load*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="add*">PROPAGATION_MANDATORY</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="participanteDaoTxDeclarativoImpl"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager" ref="txManagerDAO" />
+		<property name="target" ref="participanteDAOImpl" />
+		<property name="transactionAttributes">
+			<props>
+				<prop key="get*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="find*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="load*">PROPAGATION_REQUIRED,readOnly</prop>
+				<prop key="add*">PROPAGATION_MANDATORY</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- creamos los objetos de negocio -->
+	<bean id="libroBO" class="es.home.almacen.business.impl.LibroBOImpl">
+		<property name="dao" ref="libroDaoTxDeclarativoImpl" />
+	</bean>
+
+	<bean id="cancionBO" class="es.home.almacen.business.impl.CancionBOImpl">
+		<property name="dao" ref="cancionDaoTxDeclarativoImpl" />
+	</bean>
+
+	<bean id="grupoBO" class="es.home.almacen.business.impl.GrupoBOImpl">
+		<property name="dao" ref="grupoDaoTxDeclarativoImpl" />
+	</bean>
+
+	<bean id="discoBO" class="es.home.almacen.business.impl.DiscoBOImpl">
+		<property name="dao" ref="discoDaoTxDeclarativoImpl" />
+	</bean>
+
+	<bean id="componenteBO" class="es.home.almacen.business.impl.ComponenteBOImpl">
+		<property name="dao" ref="componenteDaoTxDeclarativoImpl" />
+	</bean>
+
+	<bean id="participanteBO" class="es.home.almacen.business.impl.ParticipanteBOImpl">
+		<property name="dao" ref="participanteDaoTxDeclarativoImpl" />
+	</bean>
+
+	<!-- ejemplo no funciona -->
+	<!-- <bean id="participanteBOImpl" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean"> 
+		<property name="transactionManager"> <ref local="txManagerDAO" /> </property> 
+		<property name="target" ref="participanteBO" /> <property name="transactionAttributes"> 
+		<props> <prop key="get*">PROPAGATION_REQUIRED,readOnly</prop> <prop key="find*">PROPAGATION_REQUIRED,readOnly</prop> 
+		<prop key="load*">PROPAGATION_REQUIRED,readOnly</prop> <prop key="add*">PROPAGATION_REQUIRED</prop> 
+		</props> </property> </bean> -->
+
+	<bean id="abstractTransactionProxy" abstract="true"
+		class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager" ref="txManagerDAO" />
+		<property name="transactionAttributes">
+			<props>
+				<prop key="get*">PROPAGATION_SUPPORTS,readOnly</prop>
+				<prop key="find*">PROPAGATION_SUPPORTS,readOnly</prop>
+				<prop key="is*">PROPAGATION_SUPPORTS,readOnly</prop>
+				<prop key="*">PROPAGATION_REQUIRED</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="cancionBOImpl" parent="abstractTransactionProxy">
+		<property name="target" ref="cancionBO" />
+	</bean>
+
+	<bean id="componenteBOImpl" parent="abstractTransactionProxy">
+		<property name="target" ref="componenteBO" />
+	</bean>
+
+	<bean id="discoBOImpl" parent="abstractTransactionProxy">
+		<property name="target" ref="discoBO" />
+	</bean>
+
+	<bean id="grupoBOImpl" parent="abstractTransactionProxy">
+		<property name="target" ref="grupoBO" />
+	</bean>
+
+	<bean id="libroBOImpl" parent="abstractTransactionProxy">
+		<property name="target" ref="libroBO" />
+	</bean>
+
+	<bean id="participanteBOImpl" parent="abstractTransactionProxy">
+		<property name="target" ref="grupoBO" />
+	</bean>
+
+
+
+</beans>
